@@ -1,13 +1,26 @@
 #Pabanjyoti, 2021
 
-from bs4 import BeautifulSoup       #for scrapping
-import requests                     #for fetching the source-html
 import os                           #for interacting with the system
-import webbrowser                   #for opening the download links
+import datetime                     #for renaming the newspaper 
+import requests                     #for fetching the source-html and downloading
+from bs4 import BeautifulSoup       #for scrapping
 
 os.system("title Dainik Asam Scrapper")
 os.system('cls' if os.name == 'nt' else 'clear')
-print('\nScrapping links, please wait...\n')
+print('\n\n███████╗ ██████╗██████╗  █████╗ ██████╗ ██████╗ ███████╗██████╗ \n'
+'██╔════╝██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔══██╗\n'
+'███████╗██║     ██████╔╝███████║██████╔╝██████╔╝█████╗  ██████╔╝\n'
+'╚════██║██║     ██╔══██╗██╔══██║██╔═══╝ ██╔═══╝ ██╔══╝  ██╔══██╗\n'
+'███████║╚██████╗██║  ██║██║  ██║██║     ██║     ███████╗██║  ██║\n'
+'╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝     ╚══════╝╚═╝  ╚═╝\n'
+'░ ░▒  ░   ░ ▒ ░ ░ ░░   ░ ▒░  ░ by ░▒ ░ ▒░ ░ ▒ ▒░   ░ ▒░  ░ ▒ ▒░ \n'
+'░  ░  ░   ▒ ░ ░   ┌─┐┌─┐┌┐ ┌─┐┌┐┌ ┬┬ ┬┌─┐┌┬┐┬ ▒ ░ ░ ▒  ░ ░ ░ ▒  \n'
+'     ░    ░       ├─┘├─┤├┴┐├─┤│││ │└┬┘│ │ │ │░ ░           ░ ░  \n'
+'░ ░▒  ░ ░ ▒ ░░ ░░ ┴  ┴ ┴└─┘┴ ┴┘└┘└┘ ┴ └─┘ ┴ ┴   ░ ▒ ▒░   ░ ▒ ▒░ \n'
+'\nScrapping links, please wait...\n\n')
+
+#fetches today's date
+today = datetime.datetime.today().strftime ('%d-%b-%Y')
 
 #two urls for both papers
 arr = ['https://dainikasam.assamtribune.com', 'https://epaper.assamtribune.com']
@@ -30,5 +43,16 @@ for link in arr:
     #construct link for api-call 
     pdfLink = link + '/content/servlet/RDESController?command=rdm.ServletDownloadEPaper&epaperId=' + paperCode + '&pageNo=all'
 
-    #open download link in the default web-browser
-    webbrowser.open_new_tab(pdfLink)
+    #downloads the pdf and rename them according to the newspaper name
+    if link == arr[0]:
+        print('\nDownloading latest edition of Dainik Asam:')
+        fname = f'Dainik_Asam_{today}.pdf'
+        r = requests.get(pdfLink)
+        open(fname , 'wb').write(r.content)
+        print('done')
+    else:
+        print('\n\nDownloading latest edition of Assam Tribune:')
+        fname = f'Assam_Tribune_{today}.pdf'
+        r = requests.get(pdfLink)
+        open(fname , 'wb').write(r.content)
+        print('done')
